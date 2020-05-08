@@ -1,11 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import socketIOClient from 'socket.io-client'
+
+import Socket from './game/Socket.js'
 
 import Home from './pages/Home'
-import About from './pages/About'
+import Waiting from './pages/Waiting'
 
 import './styles/App.css'
+
+const ENDPOINT = 'http://127.0.0.1:8000',
+socket = socketIOClient(ENDPOINT)
+
+Socket.io = socket
 
 ReactDOM.render(
 
@@ -17,7 +26,7 @@ ReactDOM.render(
 
         <Route path="/" exact component={ Home } />
 
-        <Route path="/about" component={ About } />
+        <Route path="/waiting" component={ Waiting } />
 
       </Switch>
 
