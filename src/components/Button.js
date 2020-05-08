@@ -17,7 +17,7 @@ export default class Button extends React.Component {
 
     return (
 
-      <button onClick={this.click.bind(this)} className="Button">
+      <button onClick={this.click.bind(this)} name={this.props.name} className="Button">
 
         {this.props.children}
 

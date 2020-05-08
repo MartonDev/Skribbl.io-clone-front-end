@@ -28,7 +28,7 @@ export default class Home extends React.Component {
 
   }
 
-  joinGame (e) {
+  joinGame () {
 
     Socket.io.emit('joinGame', this.state.name, this.state.gameCode, (success, players, status, playerID) => {
 
@@ -41,6 +41,7 @@ export default class Home extends React.Component {
 
         code: this.state.gameCode,
         status: status,
+        players: players,
         playerData: { id: playerID, name: this.state.name, gameCode: this.state.gameCode, points: 0 }
 
       }
@@ -51,9 +52,13 @@ export default class Home extends React.Component {
 
   }
 
-  createRoom (e) {
+  createGame () {
 
-    console.log('createRoom')
+    this.setState({ gameCode: Math.floor(Math.random() * 89999999 + 10000000) }, () => {
+
+      this.joinGame()
+
+    })
 
   }
 
@@ -72,13 +77,13 @@ export default class Home extends React.Component {
         <input type="text" placeholder="Nickname..." name="name" value={this.state.name} onChange={this.handleChange.bind(this)} />
         <input type="text" placeholder="Game code..." name="gameCode" value={this.state.gameCode} onChange={this.handleChange.bind(this)} />
 
-        <Button click={this.joinGame.bind(this)}>Join game!</Button>
+        <Button name="join" click={this.joinGame.bind(this)}>Join game!</Button>
 
         <br/>
 
         <input type="text" placeholder="Nickname..." name="name" value={this.state.name} onChange={this.handleChange.bind(this)} />
 
-        <Button click={this.createRoom.bind(this)}>Create room!</Button>
+        <Button name="create" click={this.createGame.bind(this)}>Create room!</Button>
 
       </div>
 

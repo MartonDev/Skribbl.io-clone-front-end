@@ -5,6 +5,7 @@ export default class Socket {
 
     code: '',
     status: '',
+    players: {},
     playerData: {}
 
   }
