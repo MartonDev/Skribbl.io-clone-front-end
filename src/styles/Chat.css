@@ -1,0 +1,33 @@
+.Chat {
+
+  height: 50vh;
+  width: 20vw;
+  padding: 10px;
+  border: 1px solid #1F5DC1;
+
+}
+
+.Chat ul {
+
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  height: calc(100% - 30px);
+  width: 100%;
+
+}
+
+.Chat ul li {
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+}
+
+.Chat .MessageBox {
+
+  height: 16px;
+  width: calc(100% - 12px);
+
+}

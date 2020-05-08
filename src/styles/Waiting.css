@@ -1,5 +1,14 @@
 .Waiting {
 
   padding: 15vh 20vw;
+  position: relative;
+
+}
+
+.Waiting .Chat {
+
+  position: absolute;
+  top: 15vh;
+  right: 20vw;
 
 }
