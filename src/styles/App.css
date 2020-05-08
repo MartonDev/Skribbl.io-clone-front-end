@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+body {
+
+  margin: 0;
+  background: linear-gradient(180deg, #1c3368, #1e2c3f);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+
+  font-family: Rajdhani, sans-serif;
+  font-weight: 500;
+  color: #9fa4ae;
+
+}
+
+#app {
+
+  min-height: 100vh;
+  background-image: url(/img/pattern.png);
+  background-repeat: repeat;
+  background-size: 550px;
+
+}
+
+input, button, textarea {
+
+  font-family: Rajdhani, sans-serif;
+  font-weight: 500;
+  color: #9fa4ae;
+  outline: none;
+
+}
+
+h1, h2, h3, h4, h5, h6 {
+
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+
+}
+
+a {
+
+  color: #9fa4ae;
+
+}
+
+input, textarea {
+
+  background-color: transparent;
+  border: 1px solid #1F5DC1;
+  padding: 7px 6px;
+  font-size: 17px;
+
+}
+
+::selection {
+
+  background: #F8D718;
+  color: #fff;
+
+}
+
+::-moz-selection {
+
+  background: #F8D718;
+  color: #fff;
+
+}
+
+::-webkit-scrollbar {
+
+  width: 8px;
+
+}
+
+::-webkit-scrollbar-track {
+
+  background-color: #212C3D;
+
+}
+
+::-webkit-scrollbar-thumb {
+
+  background: #4D5664;
+  border-radius: 4px;
+
+}

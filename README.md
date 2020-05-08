@@ -8,5 +8,5 @@ This is the front-end, the back-end is here: https://github.com/MartonDev/Skribb
 # run in dev environment
 npm start
 
-# to BUILD to @/dist
+# to BUILD to build/
 npm run build

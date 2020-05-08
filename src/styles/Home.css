@@ -1,0 +1,18 @@
+.Home {
+
+  padding: 15vh 20vw;
+
+}
+
+.Home h1.title, .Home h2.subtitle {
+
+  text-align: center;
+
+}
+
+.Home input, .Home .Button {
+
+  display: block;
+  margin: 10px auto;
+
+}
