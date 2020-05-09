@@ -15,6 +15,7 @@ export default class DrawArea extends Component {
       isDrawing: false,
       prevPos: { offsetX: 0, offsetY: 0 },
       line: [],
+      lines: [],
       strokeStyle: '#000'
 
     }
@@ -22,6 +23,7 @@ export default class DrawArea extends Component {
     this.onMouseDown = this.onMouseDown.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
     this.stopDrawing = this.stopDrawing.bind(this)
+    this.handleResize = this.handleResize.bind(this)
 
   }
 
@@ -44,9 +46,16 @@ export default class DrawArea extends Component {
       start: { ...this.prevPos },
       stop: { ...offset }
 
+    },
+    lineWithStyle = this.state.line.concat(pos)
+
+    for(let i = 0; i < lineWithStyle.length; i++) {
+
+      lineWithStyle[i].style = this.state.strokeStyle
+
     }
 
-    this.setState({ line: this.state.line.concat(pos) })
+    this.setState({ line: lineWithStyle })
     this.draw(this.state.prevPos, offset, this.state.strokeStyle)
 
   }
@@ -56,7 +65,7 @@ export default class DrawArea extends Component {
     if(!this.state.isDrawing)
       return
 
-    this.setState({ isDrawing: false })
+    this.setState({ isDrawing: false, lines: this.state.lines.concat([this.state.line]) })
     this.sendCanvasData()
     this.setState({ line: [] })
 
@@ -67,6 +76,15 @@ export default class DrawArea extends Component {
     const { offsetX, offsetY } = currPos,
     { offsetX: x, offsetY: y } = prevPos
 
+    this.drawOnCanvas(strokeStyle, x, y, offsetX, offsetY)
+
+    this.setState({ prevPos: { offsetX, offsetY } })
+    this.sendCanvasData()
+
+  }
+
+  drawOnCanvas (strokeStyle, x, y, offsetX, offsetY) {
+
     this.ctx.beginPath()
 
     this.ctx.strokeStyle = strokeStyle
@@ -74,9 +92,6 @@ export default class DrawArea extends Component {
     this.ctx.moveTo(x, y)
     this.ctx.lineTo(offsetX, offsetY)
     this.ctx.stroke()
-
-    this.setState({ prevPos: { offsetX, offsetY } })
-    this.sendCanvasData()
 
   }
 
@@ -87,7 +102,35 @@ export default class DrawArea extends Component {
 
   }
 
+  handleResize (e) {
+
+    this.canvas.width = this.drawArea.clientWidth - 20
+    this.canvas.height = this.drawArea.clientWidth - 20
+
+    for(let j = 0; j < this.state.lines.length; j++) {
+
+      let last = {x: null, y: null}
+
+      for(let i = 0; i < this.state.lines[j].length; i++) {
+
+        this.drawOnCanvas(this.state.lines[j][i].style, this.state.lines[j][i].stop.offsetX, this.state.lines[j][i].stop.offsetY, last.x === null ? this.state.lines[j][i].stop.offsetX : last.x, last.y === null ? this.state.lines[j][i].stop.offsetY : last.y)
+
+        last = {
+
+          x: this.state.lines[j][i].stop.offsetX,
+          y: this.state.lines[j][i].stop.offsetY
+
+        }
+
+      }
+
+    }
+
+  }
+
   componentDidMount () {
+
+    window.addEventListener('resize', this.handleResize)
 
     this.canvas.width = this.drawArea.clientWidth - 20
     this.canvas.height = this.drawArea.clientWidth - 20
@@ -95,6 +138,12 @@ export default class DrawArea extends Component {
     this.ctx.lineJoin = 'round'
     this.ctx.lineCap = 'round'
     this.ctx.lineWidth = 5
+
+  }
+
+  componentWillUnmount () {
+
+    window.removeEventListener('resize', this.handleResize);
 
   }
 
