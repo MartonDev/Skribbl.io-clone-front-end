@@ -1,7 +1,8 @@
 import React from 'react'
 
-import Button from '../components/Button'
 import Chat from '../components/Chat'
+import Players from '../components/Players'
+import WordsContainer from '../components/WordsContainer'
 import { Redirect } from 'react-router-dom'
 
 import Socket from '../game/Socket.js'
@@ -13,46 +14,15 @@ export default class Waiting extends React.Component {
   constructor () {
 
     super()
+
+    if(Socket.Game === undefined)
+      return
+
     console.log(Socket.Game)
 
     this.state = { status: Socket.Game.status }
 
-    Socket.io.on('playerJoin', this.onPlayerJoin.bind(this))
-    Socket.io.on('playerLeave', this.onPlayerLeave.bind(this))
     Socket.io.on('startGame', this.onStartGame.bind(this))
-
-  }
-
-  startGame () {
-
-    Socket.io.emit('startGame')
-
-  }
-
-  onPlayerJoin (playerName, playerID) {
-
-    if(Socket.Game.status === 'running')
-      return
-
-    Socket.Game.players[playerID] = {
-
-      name: playerName,
-      points: 0
-
-    }
-
-    console.log(`${playerName} joined. Players: `, Socket.Game.players);
-
-  }
-
-  onPlayerLeave (playerName, playerID) {
-
-    if(Socket.Game.status === 'running')
-      return
-
-    delete Socket.Game.players[playerID]
-
-    console.log(`${playerName} left. Players: `, Socket.Game.players);
 
   }
 
@@ -69,6 +39,9 @@ export default class Waiting extends React.Component {
 
   render () {
 
+    if(Socket.Game === undefined)
+      return <Redirect to="/#" />
+
     if(this.state.status === 'running')
       return <Redirect to="/game" />
 
@@ -76,7 +49,8 @@ export default class Waiting extends React.Component {
 
       <div className="Waiting">
 
-        <Button name="startGame" click={this.startGame.bind(this)}>Start game!</Button>
+        <Players></Players>
+        <WordsContainer></WordsContainer>
         <Chat></Chat>
 
       </div>

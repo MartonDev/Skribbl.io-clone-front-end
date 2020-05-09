@@ -30,7 +30,7 @@ export default class Home extends React.Component {
 
   joinGame () {
 
-    Socket.io.emit('joinGame', this.state.name, this.state.gameCode, (success, players, status, playerID) => {
+    Socket.io.emit('joinGame', this.state.name, this.state.gameCode, (success, players, status, playerID, wordsCount) => {
 
       if(!success)
         return
@@ -40,6 +40,7 @@ export default class Home extends React.Component {
       Socket.Game = {
 
         code: this.state.gameCode,
+        wordsCount: wordsCount,
         status: status,
         players: players,
         playerData: { id: playerID, name: this.state.name, gameCode: this.state.gameCode, points: 0 }

@@ -1,0 +1,57 @@
+.Players {
+
+  height: 100%;
+  width: 20%;
+  padding: 10px;
+  border: 1px solid #1F5DC1;
+  display: inline-block;
+
+}
+
+.Players h1.title {
+
+  font-size: 15px;
+  line-height: 14px;
+  color: #F8D718;
+
+}
+
+.Players ul {
+
+  margin: 0;
+  padding: 0;
+
+}
+
+.Players ul li {
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  margin-top: 10px;
+
+}
+
+.Players ul li:first-child {
+
+  margin-top: 0;
+
+}
+
+.Players ul li h1, .Players ul li h2 {
+
+  line-height: 1em;
+
+}
+
+.Players ul li h1 {
+
+  font-size: 1.6em;
+
+}
+
+.Players ul li h2 {
+
+  font-size: 1.1em;
+
+}

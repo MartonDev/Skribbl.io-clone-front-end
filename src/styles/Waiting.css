@@ -1,6 +1,6 @@
 .Waiting {
 
-  padding: 15vh 20vw;
+  padding: 15vh 12vw;
   position: relative;
 
 }
@@ -9,6 +9,12 @@
 
   position: absolute;
   top: 15vh;
-  right: 20vw;
+  right: 12vw;
+
+}
+
+.Waiting .WordsContainer {
+
+  margin-left: 20px;
 
 }

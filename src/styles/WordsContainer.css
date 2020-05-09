@@ -1,0 +1,30 @@
+.WordsContainer {
+
+  width: 27%;
+  padding: 10px;
+  border: 1px solid #1F5DC1;
+  display: inline-block;
+  vertical-align: top;
+
+}
+
+.WordsContainer h1.title {
+
+  font-size: 15px;
+  line-height: 14px;
+  color: #F8D718;
+
+}
+
+.WordsContainer .Button {
+
+  display: block;
+  margin: 10px auto 0;
+
+}
+
+.WordsContainer textarea {
+
+  width: calc(100% - 12px) !important;
+
+}
