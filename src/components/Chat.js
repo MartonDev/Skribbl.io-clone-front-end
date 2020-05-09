@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 import Socket from '../game/Socket.js'
 
 import '../styles/Chat.css'
 
-export default class Chat extends React.Component {
+export default class Chat extends Component {
 
   constructor () {
 

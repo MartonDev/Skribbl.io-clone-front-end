@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 import Button from '../components/Button'
 
@@ -6,7 +6,7 @@ import Socket from '../game/Socket.js'
 
 import '../styles/WordsContainer.css'
 
-export default class WordsContainer extends React.Component {
+export default class WordsContainer extends Component {
 
   constructor () {
 
@@ -57,7 +57,7 @@ export default class WordsContainer extends React.Component {
 
         <h1 className="title">Words ({this.state.wordsCount})</h1>
 
-        <textarea placeholder="Enter new words..." name="addWord" value={this.state.addWord} onChange={this.handleChange.bind(this)}></textarea>
+        <textarea placeholder="Enter new words (one each line)..." name="addWord" value={this.state.addWord} onChange={this.handleChange.bind(this)}></textarea>
 
         <Button name="addNewWord" click={this.addNewWord.bind(this)}>Add words!</Button>
         <Button name="startGame" click={this.startGame.bind(this)}>Start game!</Button>

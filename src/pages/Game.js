@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 import Chat from '../components/Chat'
 import Players from '../components/Players'
@@ -9,7 +9,7 @@ import Socket from '../game/Socket.js'
 
 import '../styles/Game.css'
 
-export default class Game extends React.Component {
+export default class Game extends Component {
 
   constructor () {
 

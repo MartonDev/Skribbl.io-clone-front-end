@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 import Button from '../components/Button'
 import { Redirect } from 'react-router-dom'
@@ -7,7 +7,7 @@ import Socket from '../game/Socket.js'
 
 import '../styles/Home.css'
 
-export default class Home extends React.Component {
+export default class Home extends Component {
 
   constructor () {
 
