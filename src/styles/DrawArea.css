@@ -4,3 +4,23 @@
   padding: 10px;
 
 }
+
+.DrawArea h1.Word {
+
+  text-align: center;
+  font-size: 1.7em;
+  color: #F8D718;
+
+}
+
+.DrawArea .Tools {
+
+  text-align: center;
+
+}
+
+.DrawArea .Tools .Button[name=pencil].pencil, .DrawArea .Tools .Button[name=rubber].rubber {
+
+  color: #F8D718;
+
+}

@@ -17,7 +17,7 @@ export default class Button extends Component {
 
     return (
 
-      <button onClick={this.click.bind(this)} name={this.props.name} className="Button">
+      <button onClick={this.click.bind(this)} name={this.props.name} className={'Button ' + (this.props.tool !== undefined ? this.props.tool : '')}>
 
         {this.props.children}
 

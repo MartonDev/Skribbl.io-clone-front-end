@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 
 import Socket from '../game/Socket.js'
 
+import Button from './Button'
+import { ChromePicker } from 'react-color'
+
 import '../styles/DrawArea.css'
 
 export default class DrawArea extends Component {
@@ -16,7 +19,11 @@ export default class DrawArea extends Component {
       prevPos: { offsetX: 0, offsetY: 0 },
       line: [],
       lines: [],
-      strokeStyle: '#000'
+      strokeStyle: '#000',
+      tool: 'pencil',
+      backgroundColor: '#fff',
+      displayColorPicker: false,
+      displayBackgroundColorPicker: false
 
     }
 
@@ -27,19 +34,19 @@ export default class DrawArea extends Component {
 
   }
 
-  onMouseDown (el) {
+  onMouseDown (e) {
 
-    const { offsetX, offsetY } = el.nativeEvent
+    const { offsetX, offsetY } = e.nativeEvent
     this.setState({ isDrawing: true, prevPos: { offsetX, offsetY } })
 
   }
 
-  onMouseMove (el) {
+  onMouseMove (e) {
 
     if(!this.state.isDrawing)
       return
 
-    const { offsetX, offsetY } = el.nativeEvent,
+    const { offsetX, offsetY } = e.nativeEvent,
     offset = { offsetX, offsetY },
     pos = {
 
@@ -137,7 +144,7 @@ export default class DrawArea extends Component {
     this.ctx = this.canvas.getContext('2d')
     this.ctx.lineJoin = 'round'
     this.ctx.lineCap = 'round'
-    this.ctx.lineWidth = 5
+    this.ctx.lineWidth = 1
 
   }
 
@@ -147,13 +154,65 @@ export default class DrawArea extends Component {
 
   }
 
+  changeTool (e) {
+
+    this.setState({ tool: e.target.name })
+
+  }
+
+  handlePencilColorPicker () {
+
+    this.setState({ displayColorPicker: !this.state.displayColorPicker })
+
+  }
+
+  handleBackgroundColorPicker () {
+
+    this.setState({ displayBackgroundColorPicker: !this.state.displayBackgroundColorPicker })
+
+  }
+
+  handleStrokeColorChange (color, e) {
+
+    this.setState({ strokeStyle: color.hex })
+
+  }
+
+  handleBackgroundColorChange (color, e) {
+
+    this.setState({ backgroundColor: color.hex })
+
+  }
+
   render () {
 
     return (
 
       <div className="DrawArea" ref={(ref) => (this.drawArea = ref)}>
 
-        <canvas ref={(ref) => (this.canvas = ref)} style={{ background: 'white' }} onMouseDown={this.onMouseDown} onMouseLeave={this.stopDrawing} onMouseUp={this.stopDrawing} onMouseMove={this.onMouseMove}></canvas>
+        <h1 className="Word">Word</h1>
+
+        <canvas ref={(ref) => (this.canvas = ref)} style={{ background: this.state.backgroundColor }} onMouseDown={this.onMouseDown} onMouseLeave={this.stopDrawing} onMouseUp={this.stopDrawing} onMouseMove={this.onMouseMove}></canvas>
+
+        <div className="Tools">
+
+          <Button name="pencil" click={this.changeTool.bind(this)} tool={this.state.tool}>Pencil</Button>
+          <Button name="rubber" click={this.changeTool.bind(this)} tool={this.state.tool}>Rubber</Button>
+          <Button click={this.handlePencilColorPicker.bind(this)}>Pencil color</Button>
+          <Button click={this.handleBackgroundColorPicker.bind(this)}>Bg color</Button>
+
+          <div>
+
+            <div style={{margin: '0 auto', display: 'inline-block'}}>
+
+              { this.state.displayColorPicker ? <ChromePicker color={this.state.strokeStyle} onChangeComplete={this.handleStrokeColorChange.bind(this)} /> : null }
+              { this.state.displayBackgroundColorPicker ? <ChromePicker color={this.state.backgroundColor} onChangeComplete={this.handleBackgroundColorChange.bind(this)} /> : null }
+
+            </div>
+
+          </div>
+
+        </div>
 
       </div>
 
