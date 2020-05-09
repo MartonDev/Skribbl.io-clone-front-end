@@ -1,5 +1,8 @@
 import React from 'react'
 
+import Chat from '../components/Chat'
+import Players from '../components/Players'
+import DrawArea from '../components/DrawArea'
 import { Redirect } from 'react-router-dom'
 
 import Socket from '../game/Socket.js'
@@ -15,8 +18,6 @@ export default class Game extends React.Component {
     if(Socket.Game === undefined)
       return
 
-    console.log(Socket.Game)
-
   }
 
   render () {
@@ -28,7 +29,9 @@ export default class Game extends React.Component {
 
       <div className="Game">
 
-
+        <Players></Players>
+        <DrawArea></DrawArea>
+        <Chat></Chat>
 
       </div>
 

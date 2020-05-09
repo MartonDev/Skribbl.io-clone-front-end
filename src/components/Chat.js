@@ -17,14 +17,24 @@ export default class Chat extends React.Component {
 
     }
 
+  }
+
+  componentDidMount () {
+
     Socket.io.on('messageReceive', this.onMessageReceive.bind(this))
+
+  }
+
+  componentWillUnmount () {
+
+    Socket.io.removeAllListeners('messageReceive')
 
   }
 
   onMessageReceive (name, message) {
 
     this.setState({ messages: [...this.state.messages, { name: name, message: message }] })
-    this.messagesEnd.scrollIntoView({ behavior: "smooth" })
+    this.messagesEnd.scrollIntoView({ behavior: 'smooth' })
     console.log(this.state.messages)
 
   }
@@ -64,7 +74,7 @@ export default class Chat extends React.Component {
         <ul>
 
           {chatMessages}
-          <div style={{ float:"left", clear: "both" }} ref={(el) => { this.messagesEnd = el }}></div>
+          <div ref={(el) => this.messagesEnd = el}></div>
 
         </ul>
 

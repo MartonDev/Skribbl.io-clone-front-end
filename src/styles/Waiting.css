@@ -5,16 +5,11 @@
 
 }
 
-.Waiting .Chat {
+.Waiting .Chat, .Waiting .Players, .Waiting .WordsContainer {
 
-  position: absolute;
-  top: 15vh;
-  right: 12vw;
-
-}
-
-.Waiting .WordsContainer {
-
-  margin-left: 20px;
+  display: inline-block;
+  vertical-align: top;
+  width: calc(30% - 20px);
+  margin: 10px;
 
 }
