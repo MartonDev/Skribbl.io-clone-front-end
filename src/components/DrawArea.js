@@ -23,7 +23,9 @@ export default class DrawArea extends Component {
       displayColorPicker: false,
       displayBackgroundColorPicker: false,
       word: '',
-      isPlayerDrawing: false
+      isPlayerDrawing: false,
+      round: Socket.Game.round,
+      timeLeft: 30
 
     }
 
@@ -37,6 +39,7 @@ export default class DrawArea extends Component {
     Socket.io.on('drawWord', this.onWordChange.bind(this))
     Socket.io.on('currentDrawer', this.handleDrawerChange.bind(this))
     Socket.io.on('receiveDrawingData', this.handleDrawingData.bind(this))
+    Socket.io.on('receiveBackgroundData', this.handleBackgroundColorData.bind(this))
 
   }
 
@@ -54,7 +57,7 @@ export default class DrawArea extends Component {
 
     for(let i = 0; i < drawingData.length; i++) {
 
-      this.drawOnCanvas(drawingData.style, drawingData[i].stop.offsetX, drawingData[i].stop.offsetY, last.x === null ? drawingData[i].stop.offsetX : last.x, last.y === null ? drawingData[i].stop.offsetY : last.y)
+      this.drawOnCanvas(drawingData[i].style, drawingData[i].stop.offsetX, drawingData[i].stop.offsetY, last.x === null ? drawingData[i].stop.offsetX : last.x, last.y === null ? drawingData[i].stop.offsetY : last.y)
 
       last = {
 
@@ -67,9 +70,27 @@ export default class DrawArea extends Component {
 
   }
 
+  handleBackgroundColorData (bgColor) {
+
+    this.setState({ backgroundColor: bgColor })
+
+  }
+
   onWordChange (word) {
 
-    this.setState({ word: word })
+    this.setState({ word: word, round: (Socket.Game.round + 1), timeLeft: (Socket.Game.timeout / 1000), backgroundColor: '#fff' })
+    Socket.Game.round = this.state.round
+
+    let count = Socket.Game.timeout / 1000,
+    countDown = setInterval(() => {
+
+      count--
+      this.setState({ timeLeft: count })
+
+      if(count === 0)
+        clearInterval(countDown)
+
+    }, 1000)
 
   }
 
@@ -159,6 +180,8 @@ export default class DrawArea extends Component {
     if(!this.state.isPlayerDrawing)
       return
 
+    for(let i = 0; i < this.line.length; i++) this.line[i].style = this.state.strokeStyle
+
     console.log('Sending drawing data...')
     Socket.io.emit('drawingData', this.line)
 
@@ -245,6 +268,19 @@ export default class DrawArea extends Component {
   handleBackgroundColorChange (color, e) {
 
     this.setState({ backgroundColor: color.hex })
+    Socket.io.emit('backgroundColorChange', color.hex)
+
+  }
+
+  closePencilColorPicker () {
+
+    this.setState({ displayColorPicker: false })
+
+  }
+
+  closeBgColorPicker () {
+
+    this.setState({ displayBackgroundColorPicker: false })
 
   }
 
@@ -254,7 +290,7 @@ export default class DrawArea extends Component {
 
       <div className="DrawArea" ref={(ref) => (this.drawArea = ref)}>
 
-        <h1 className="Word"><span className="Time">TIMELEFT</span>{this.state.word}<span className="Round">Round x of y</span></h1>
+        <h1 className="Word"><span className="Time">{this.state.timeLeft} : {Socket.Game.timeout / 1000}</span>{this.state.word}<span className="Round">Round { this.state.round } of { Socket.Game.rounds }</span></h1>
 
         <canvas ref={(ref) => (this.canvas = ref)} style={{ background: this.state.backgroundColor }} onMouseDown={this.onMouseDown} onMouseLeave={this.stopDrawing} onMouseUp={this.stopDrawing} onMouseMove={this.onMouseMove}></canvas>
 
@@ -264,19 +300,34 @@ export default class DrawArea extends Component {
 
             <Button name="pencil" click={this.changeTool.bind(this)} tool={this.state.tool}>Pencil</Button>
             <Button name="rubber" click={this.changeTool.bind(this)} tool={this.state.tool}>Rubber</Button>
-            <Button click={this.handlePencilColorPicker.bind(this)}>Pencil color</Button>
-            <Button click={this.handleBackgroundColorPicker.bind(this)}>Bg color</Button>
+            <Button click={this.handlePencilColorPicker.bind(this)}>
 
-            <div>
+              Pencil color
+              <div className="ColorPickerPlaceholder">
 
-              <div style={{margin: '0 auto', display: 'inline-block'}}>
+                <div className="ColorPickerContainer">
 
-                { this.state.displayColorPicker ? <ChromePicker color={this.state.strokeStyle} onChangeComplete={this.handleStrokeColorChange.bind(this)} /> : null }
-                { this.state.displayBackgroundColorPicker ? <ChromePicker color={this.state.backgroundColor} onChangeComplete={this.handleBackgroundColorChange.bind(this)} /> : null }
+                  { this.state.displayColorPicker ? <div><div className="ColorPickerDismiss" onClick={this.closePencilColorPicker.bind(this)}></div><ChromePicker color={this.state.strokeStyle} onChangeComplete={this.handleStrokeColorChange.bind(this)} /></div> : null }
+
+                </div>
 
               </div>
 
-            </div>
+            </Button>
+            <Button click={this.handleBackgroundColorPicker.bind(this)}>
+
+              Bg color
+              <div className="ColorPickerPlaceholder">
+
+                <div className="ColorPickerContainer">
+
+                  { this.state.displayBackgroundColorPicker ? <div><div className="ColorPickerDismiss" onClick={this.closeBgColorPicker.bind(this)}></div><ChromePicker color={this.state.backgroundColor} onChangeComplete={this.handleBackgroundColorChange.bind(this)} /></div> : null }
+
+                </div>
+
+              </div>
+
+            </Button>
 
           </div>
 

@@ -23,13 +23,13 @@
 
 }
 
-.Time {
+.DrawArea h1.Word span.Time {
 
   float: left;
 
 }
 
-.Round {
+.DrawArea h1.Word span.Round {
 
   float: right;
 
@@ -44,5 +44,28 @@
 .DrawArea .Tools .Button[name=pencil].pencil, .DrawArea .Tools .Button[name=rubber].rubber {
 
   color: #F8D718;
+
+}
+
+.DrawArea .Tools .ColorPickerPlaceholder {
+
+  position: relative;
+
+}
+
+.DrawArea .Tools .ColorPickerPlaceholder .ColorPickerContainer {
+
+  position: absolute;
+  bottom: 0;
+
+}
+
+.DrawArea .Tools .ColorPickerPlaceholder .ColorPickerContainer .ColorPickerDismiss {
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 
 }

@@ -59,6 +59,8 @@ export default class WordsContainer extends Component {
 
         <textarea placeholder="Enter new words (one each line)..." name="addWord" value={this.state.addWord} onChange={this.handleChange.bind(this)}></textarea>
 
+        <h1 className="title">Game code: <i>{Socket.Game.code}</i></h1>
+
         <Button name="addNewWord" click={this.addNewWord.bind(this)}>Add words!</Button>
         <Button name="startGame" click={this.startGame.bind(this)}>Start game!</Button>
 

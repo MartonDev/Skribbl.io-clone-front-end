@@ -31,6 +31,7 @@ export default class Waiting extends Component {
     if(Socket.Game.status === 'running')
       return
 
+    Socket.Game.round = 0
     Socket.Game.rounds = rounds
     Socket.Game.timeout = timeout
     Socket.Game.status = 'running'
