@@ -254,7 +254,7 @@ export default class DrawArea extends Component {
 
       <div className="DrawArea" ref={(ref) => (this.drawArea = ref)}>
 
-        <h1 className="Word">{this.state.word}</h1>
+        <h1 className="Word"><span className="Time">TIMELEFT</span>{this.state.word}<span className="Round">Round x of y</span></h1>
 
         <canvas ref={(ref) => (this.canvas = ref)} style={{ background: this.state.backgroundColor }} onMouseDown={this.onMouseDown} onMouseLeave={this.stopDrawing} onMouseUp={this.stopDrawing} onMouseMove={this.onMouseMove}></canvas>
 

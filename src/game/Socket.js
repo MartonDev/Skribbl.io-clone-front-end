@@ -7,7 +7,9 @@ export default class Socket {
     status: '',
     players: {},
     playerData: {},
-    currentDrawerID: ''
+    currentDrawerID: '',
+    rounds: 0,
+    timeout: 0
 
   }
 

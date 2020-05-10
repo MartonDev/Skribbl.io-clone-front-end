@@ -26,11 +26,13 @@ export default class Waiting extends Component {
 
   }
 
-  onStartGame () {
+  onStartGame (rounds, timeout) {
 
     if(Socket.Game.status === 'running')
       return
 
+    Socket.Game.rounds = rounds
+    Socket.Game.timeout = timeout
     Socket.Game.status = 'running'
     this.setState({ status: 'running' })
     console.log('Starting game')
