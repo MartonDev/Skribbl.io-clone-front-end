@@ -17,8 +17,6 @@ export default class DrawArea extends Component {
 
       isDrawing: false,
       prevPos: { offsetX: 0, offsetY: 0 },
-      line: [],
-      lines: [],
       strokeStyle: '#000',
       tool: 'pencil',
       backgroundColor: '#fff',
@@ -42,10 +40,30 @@ export default class DrawArea extends Component {
 
   }
 
+  line = []
+  lines = []
+
   handleDrawingData (drawingData) {
 
-    this.setState({ lines: drawingData, line: [] })
-    this.reDrawOnCanvas()
+    console.log('Receiving drawing data')
+
+    this.lines = this.lines.concat([drawingData])
+    this.line = []
+
+    let last = {x: null, y: null}
+
+    for(let i = 0; i < drawingData.length; i++) {
+
+      this.drawOnCanvas(drawingData.style, drawingData[i].stop.offsetX, drawingData[i].stop.offsetY, last.x === null ? drawingData[i].stop.offsetX : last.x, last.y === null ? drawingData[i].stop.offsetY : last.y)
+
+      last = {
+
+        x: drawingData[i].stop.offsetX,
+        y: drawingData[i].stop.offsetY
+
+      }
+
+    }
 
   }
 
@@ -89,15 +107,10 @@ export default class DrawArea extends Component {
       stop: { ...offset }
 
     },
-    lineWithStyle = this.state.line.concat(pos)
+    lineWithStyle = this.line.concat(pos)
+    lineWithStyle.style = this.state.strokeStyle
+    this.line = lineWithStyle
 
-    for(let i = 0; i < lineWithStyle.length; i++) {
-
-      lineWithStyle[i].style = this.state.strokeStyle
-
-    }
-
-    this.setState({ line: lineWithStyle })
     this.draw(this.state.prevPos, offset, this.state.strokeStyle)
 
   }
@@ -110,9 +123,10 @@ export default class DrawArea extends Component {
     if(!this.state.isPlayerDrawing)
       return
 
-    this.setState({ isDrawing: false, lines: this.state.lines.concat([this.state.line]) })
+    this.setState({ isDrawing: false })
+    this.lines = this.lines.concat([this.line])
     this.sendCanvasData()
-    this.setState({ line: [] })
+    this.line = []
 
   }
 
@@ -140,34 +154,36 @@ export default class DrawArea extends Component {
 
   }
 
-  async sendCanvasData () {
+  sendCanvasData () {
 
     if(!this.state.isPlayerDrawing)
       return
 
-    //TODO: send all painting data
     console.log('Sending drawing data...')
-    Socket.io.emit('drawingData', this.state.lines)
+    Socket.io.emit('drawingData', this.line)
 
   }
 
   reDrawOnCanvas () {
 
+    console.log('re-drawing')
+    this.clearCanvas()
+
     this.canvas.width = this.drawArea.clientWidth - 20
     this.canvas.height = this.drawArea.clientWidth - 20
 
-    for(let j = 0; j < this.state.lines.length; j++) {
+    for(let j = 0; j < this.lines.length; j++) {
 
       let last = {x: null, y: null}
 
-      for(let i = 0; i < this.state.lines[j].length; i++) {
+      for(let i = 0; i < this.lines[j].length; i++) {
 
-        this.drawOnCanvas(this.state.lines[j][i].style, this.state.lines[j][i].stop.offsetX, this.state.lines[j][i].stop.offsetY, last.x === null ? this.state.lines[j][i].stop.offsetX : last.x, last.y === null ? this.state.lines[j][i].stop.offsetY : last.y)
+        this.drawOnCanvas(this.lines[j].style, this.lines[j][i].stop.offsetX, this.lines[j][i].stop.offsetY, last.x === null ? this.lines[j][i].stop.offsetX : last.x, last.y === null ? this.lines[j][i].stop.offsetY : last.y)
 
         last = {
 
-          x: this.state.lines[j][i].stop.offsetX,
-          y: this.state.lines[j][i].stop.offsetY
+          x: this.lines[j][i].stop.offsetX,
+          y: this.lines[j][i].stop.offsetY
 
         }
 
