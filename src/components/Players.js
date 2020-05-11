@@ -22,9 +22,10 @@ export default class Players extends Component {
 
     if(this.props.endGame) {
 
-      this.state.players.sort((a, b) => {
+      //TODO: fix this, it overrides this.state.players with sorted KEYs, but no values
+      Object.keys(this.state.players).sort((a, b) => {
 
-        return a.points - b.points
+        return this.state.players[a].points - this.state.players[b].points
 
       })
 
