@@ -4,6 +4,7 @@ import Socket from '../game/Socket.js'
 
 import Button from './Button'
 import { ChromePicker } from 'react-color'
+import { Redirect } from 'react-router-dom'
 
 import '../styles/DrawArea.css'
 
@@ -25,7 +26,8 @@ export default class DrawArea extends Component {
       word: '',
       isPlayerDrawing: false,
       round: Socket.Game.round,
-      timeLeft: 30
+      timeLeft: (Socket.Game.timeout / 1000),
+      gameEnded: false
 
     }
 
@@ -43,6 +45,7 @@ export default class DrawArea extends Component {
     Socket.io.on('receiveRubber', this.handleRubber.bind(this))
     Socket.io.on('pointsUpdate', this.onPointsUpdate.bind(this))
     Socket.io.on('roundNumberChange', this.onRoundNumberChange.bind(this))
+    Socket.io.on('endGame', this.onGameEnded.bind(this))
 
   }
 
@@ -115,7 +118,6 @@ export default class DrawArea extends Component {
 
       if(this.state.timeLeft === (Socket.Game.timeout / 1000) && count !== (Socket.Game.timeout / 1000)) {
 
-        console.log('clearing...')
         clearInterval(countDown)
         return
 
@@ -368,7 +370,16 @@ export default class DrawArea extends Component {
 
   }
 
+  onGameEnded () {
+
+    this.setState({ gameEnded: true })
+
+  }
+
   render () {
+
+    if(this.state.gameEnded)
+      return <Redirect to="/results" />
 
     return (
 

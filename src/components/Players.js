@@ -20,6 +20,18 @@ export default class Players extends Component {
 
   componentDidMount () {
 
+    if(this.props.endGame) {
+
+      this.state.players.sort((a, b) => {
+
+        return a.points - b.points
+
+      })
+
+      return
+
+    }
+
     Socket.io.on('playerJoin', this.onPlayerJoin.bind(this))
     Socket.io.on('playerLeave', this.onPlayerLeave.bind(this))
     Socket.io.on('pointsUpdate', this.onPointsUpdate.bind(this))

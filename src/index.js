@@ -9,6 +9,7 @@ import Socket from './game/Socket.js'
 import Home from './pages/Home'
 import Waiting from './pages/Waiting'
 import Game from './pages/Game'
+import Results from './pages/Results'
 
 import './styles/App.css'
 
@@ -29,6 +30,7 @@ ReactDOM.render(
 
         <Route path="/waiting" component={ Waiting } />
         <Route path="/game" component={ Game } />
+        <Route path="/results" component={ Results } />
 
       </Switch>
 
