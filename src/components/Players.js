@@ -16,8 +16,21 @@ export default class Players extends Component {
 
     }
 
+  }
+
+  componentDidMount () {
+
     Socket.io.on('playerJoin', this.onPlayerJoin.bind(this))
     Socket.io.on('playerLeave', this.onPlayerLeave.bind(this))
+    Socket.io.on('pointsUpdate', this.onPointsUpdate.bind(this))
+
+  }
+
+  componentWillUnmount () {
+
+    Socket.io.removeAllListeners('playerJoin')
+    Socket.io.removeAllListeners('playerLeave')
+    Socket.io.removeAllListeners('pointsUpdate')
 
   }
 
@@ -44,13 +57,20 @@ export default class Players extends Component {
 
   }
 
+  onPointsUpdate (playerID, currentPoints) {
+
+    Socket.Game.players[playerID].points = currentPoints
+    this.setState({ players: Socket.Game.players })
+
+  }
+
   render () {
 
     let playersItems = Object.keys(this.state.players).map(key =>
 
       <li key={key}>
 
-        <h1>{this.state.players[key].name}</h1>
+        <h1>{this.state.players[key].name} {key === Socket.Game.playerData.id ? '(You)' : null}</h1>
         <h2>{this.state.players[key].points} points</h2>
 
       </li>

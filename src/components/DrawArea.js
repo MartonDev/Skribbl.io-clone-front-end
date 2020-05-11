@@ -41,6 +41,7 @@ export default class DrawArea extends Component {
     Socket.io.on('receiveDrawingData', this.handleDrawingData.bind(this))
     Socket.io.on('receiveBackgroundData', this.handleBackgroundColorData.bind(this))
     Socket.io.on('receiveRubber', this.handleRubber.bind(this))
+    Socket.io.on('pointsUpdate', this.onPointsUpdate.bind(this))
 
   }
 
@@ -112,6 +113,16 @@ export default class DrawArea extends Component {
         clearInterval(countDown)
 
     }, 1000)
+
+  }
+
+  onPointsUpdate (playerID, currentPoints) {
+
+    if(playerID === Socket.Game.playerData.id) {
+
+      this.setState({ word: Socket.Game.lastChatMessage})
+
+    }
 
   }
 

@@ -10,7 +10,8 @@ export default class Socket {
     currentDrawerID: '',
     round: 0,
     rounds: 0,
-    timeout: 0
+    timeout: 0,
+    lastChatMessage: ''
 
   }
 

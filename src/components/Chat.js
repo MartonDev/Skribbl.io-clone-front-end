@@ -51,6 +51,7 @@ export default class Chat extends Component {
       return
 
     Socket.io.emit('sendMessage', this.state.msg)
+    Socket.Game.lastChatMessage = this.state.msg
     this.setState({ msg: '' })
 
   }
