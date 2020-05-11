@@ -40,6 +40,7 @@ export default class DrawArea extends Component {
     Socket.io.on('currentDrawer', this.handleDrawerChange.bind(this))
     Socket.io.on('receiveDrawingData', this.handleDrawingData.bind(this))
     Socket.io.on('receiveBackgroundData', this.handleBackgroundColorData.bind(this))
+    Socket.io.on('receiveRubber', this.handleRubber.bind(this))
 
   }
 
@@ -76,6 +77,26 @@ export default class DrawArea extends Component {
 
   }
 
+  handleRubber (offsetX, offsetY) {
+
+    this.ctx.clearRect(offsetX - 4, offsetY - 4, 8, 8)
+
+    for(let i = 0; i < this.lines.length; i++) {
+
+      for(let j = 0; j < this.lines[i].length; j++) {
+
+        if(this.lines[i][j] === undefined)
+          continue
+
+        if(this.lines[i][j].stop.offsetX > offsetX - 4 && this.lines[i][j].stop.offsetX < offsetX + 4 && this.lines[i][j].stop.offsetY > offsetY - 4 && this.lines[i][j].stop.offsetY < offsetY + 4)
+          delete this.lines[i][j]
+
+      }
+
+    }
+
+  }
+
   onWordChange (word) {
 
     this.setState({ word: word, round: (Socket.Game.round + 1), timeLeft: (Socket.Game.timeout / 1000), backgroundColor: '#fff' })
@@ -99,6 +120,9 @@ export default class DrawArea extends Component {
     Socket.Game.currentDrawerID = drawerID
     this.setState({ isPlayerDrawing: false })
     this.clearCanvas()
+
+    this.lines = []
+    this.line = []
 
     if(drawerID === Socket.Game.playerData.id)
       this.setState({ isPlayerDrawing: true })
@@ -127,8 +151,35 @@ export default class DrawArea extends Component {
       start: { ...this.prevPos },
       stop: { ...offset }
 
-    },
-    lineWithStyle = this.line.concat(pos)
+    }
+
+    if(this.state.tool === 'rubber') {
+
+      this.ctx.clearRect(offsetX - 4, offsetY - 4, 8, 8)
+      Socket.io.emit('rubber', offsetX, offsetY)
+
+      for(let i = 0; i < this.lines.length; i++) {
+
+        for(let j = 0; j < this.lines[i].length; j++) {
+
+          if(this.lines[i][j] === undefined)
+            continue
+
+          if(this.lines[i][j].stop.offsetX > offsetX - 4 && this.lines[i][j].stop.offsetX < offsetX + 4 && this.lines[i][j].stop.offsetY > offsetY - 4 && this.lines[i][j].stop.offsetY < offsetY + 4) {
+
+            delete this.lines[i][j]
+
+          }
+
+        }
+
+      }
+
+      return
+
+    }
+
+    const lineWithStyle = this.line.concat(pos)
     lineWithStyle.style = this.state.strokeStyle
     this.line = lineWithStyle
 
@@ -200,6 +251,13 @@ export default class DrawArea extends Component {
       let last = {x: null, y: null}
 
       for(let i = 0; i < this.lines[j].length; i++) {
+
+        if(this.lines[j][i] === undefined) {
+
+          last = {x: null, y: null}
+          continue
+
+        }
 
         this.drawOnCanvas(this.lines[j].style, this.lines[j][i].stop.offsetX, this.lines[j][i].stop.offsetY, last.x === null ? this.lines[j][i].stop.offsetX : last.x, last.y === null ? this.lines[j][i].stop.offsetY : last.y)
 
@@ -299,7 +357,7 @@ export default class DrawArea extends Component {
           <div className="Tools">
 
             <Button name="pencil" click={this.changeTool.bind(this)} tool={this.state.tool}>Pencil</Button>
-            <Button name="rubber" click={this.changeTool.bind(this)} tool={this.state.tool}>Rubber</Button>
+            <Button name="rubber" click={this.changeTool.bind(this)} tool={this.state.tool}>Ereaser</Button>
             <Button click={this.handlePencilColorPicker.bind(this)}>
 
               Pencil color
