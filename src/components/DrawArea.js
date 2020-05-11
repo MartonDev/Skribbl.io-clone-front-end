@@ -42,6 +42,7 @@ export default class DrawArea extends Component {
     Socket.io.on('receiveBackgroundData', this.handleBackgroundColorData.bind(this))
     Socket.io.on('receiveRubber', this.handleRubber.bind(this))
     Socket.io.on('pointsUpdate', this.onPointsUpdate.bind(this))
+    Socket.io.on('roundNumberChange', this.onRoundNumberChange.bind(this))
 
   }
 
@@ -98,13 +99,27 @@ export default class DrawArea extends Component {
 
   }
 
+  onRoundNumberChange (roundNumber) {
+
+    this.setState({ round: roundNumber })
+    Socket.Game.round = roundNumber
+
+  }
+
   onWordChange (word) {
 
-    this.setState({ word: word, round: (Socket.Game.round + 1), timeLeft: (Socket.Game.timeout / 1000), backgroundColor: '#fff' })
-    Socket.Game.round = this.state.round
+    this.setState({ word: word, timeLeft: (Socket.Game.timeout / 1000), backgroundColor: '#fff' })
 
     let count = Socket.Game.timeout / 1000,
     countDown = setInterval(() => {
+
+      if(this.state.timeLeft === (Socket.Game.timeout / 1000) && count !== (Socket.Game.timeout / 1000)) {
+
+        console.log('clearing...')
+        clearInterval(countDown)
+        return
+
+      }
 
       count--
       this.setState({ timeLeft: count })
