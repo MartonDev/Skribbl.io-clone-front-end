@@ -46,6 +46,7 @@ export default class DrawArea extends Component {
     Socket.io.on('pointsUpdate', this.onPointsUpdate.bind(this))
     Socket.io.on('roundNumberChange', this.onRoundNumberChange.bind(this))
     Socket.io.on('endGame', this.onGameEnded.bind(this))
+    Socket.io.on('wordTip', this.onWordTip.bind(this))
 
   }
 
@@ -101,6 +102,12 @@ export default class DrawArea extends Component {
       }
 
     }
+
+  }
+
+  onWordTip (wordHelp) {
+
+    this.setState({ word: wordHelp })
 
   }
 
