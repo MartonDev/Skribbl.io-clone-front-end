@@ -51,13 +51,15 @@ export default class DrawArea extends Component {
 
   line = []
   lines = []
+  drawerCanvasWidth = null
 
-  handleDrawingData (drawingData) {
+  handleDrawingData (drawingData, drawerWidth) {
 
     console.log('Receiving drawing data')
 
     this.lines = this.lines.concat([drawingData])
     this.line = []
+    this.drawerCanvasWidth = drawerWidth
 
     let last = {x: null, y: null}
 
@@ -152,8 +154,12 @@ export default class DrawArea extends Component {
     this.lines = []
     this.line = []
 
-    if(drawerID === Socket.Game.playerData.id)
+    if(drawerID === Socket.Game.playerData.id) {
+
+      this.drawerCanvasWidth = null
       this.setState({ isPlayerDrawing: true })
+
+    }
 
   }
 
@@ -248,6 +254,15 @@ export default class DrawArea extends Component {
 
     this.ctx.strokeStyle = strokeStyle
 
+    if(!this.state.isPlayerDrawing && this.drawerCanvasWidth != null) {
+
+      x = (x / this.drawerCanvasWidth * 100) * (this.canvas.width / 100)
+      y = (y / this.drawerCanvasWidth * 100) * (this.canvas.width / 100)
+      offsetX = (offsetX / this.drawerCanvasWidth * 100) * (this.canvas.width / 100)
+      offsetY = (offsetY / this.drawerCanvasWidth * 100) * (this.canvas.width / 100)
+
+    }
+
     this.ctx.moveTo(x, y)
     this.ctx.lineTo(offsetX, offsetY)
     this.ctx.stroke()
@@ -262,7 +277,7 @@ export default class DrawArea extends Component {
     for(let i = 0; i < this.line.length; i++) this.line[i].style = this.state.strokeStyle
 
     console.log('Sending drawing data...')
-    Socket.io.emit('drawingData', this.line)
+    Socket.io.emit('drawingData', this.line, this.canvas.width)
 
   }
 
