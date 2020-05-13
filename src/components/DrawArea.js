@@ -115,6 +115,7 @@ export default class DrawArea extends Component {
 
     this.setState({ round: roundNumber })
     Socket.Game.round = roundNumber
+    this.setState({ isDrawing: false })
 
   }
 
@@ -357,13 +358,19 @@ export default class DrawArea extends Component {
 
   handlePencilColorPicker () {
 
-    this.setState({ displayColorPicker: !this.state.displayColorPicker })
+    if(this.state.displayColorPicker)
+      return
+
+    this.setState({ displayColorPicker: true })
 
   }
 
   handleBackgroundColorPicker () {
 
-    this.setState({ displayBackgroundColorPicker: !this.state.displayBackgroundColorPicker })
+    if(this.state.displayBackgroundColorPicker)
+      return
+
+    this.setState({ displayBackgroundColorPicker: true })
 
   }
 
@@ -422,11 +429,7 @@ export default class DrawArea extends Component {
               Pencil color
               <div className="ColorPickerPlaceholder">
 
-                <div className="ColorPickerContainer">
-
-                  { this.state.displayColorPicker ? <div><div className="ColorPickerDismiss" onClick={this.closePencilColorPicker.bind(this)}></div><ChromePicker color={this.state.strokeStyle} onChangeComplete={this.handleStrokeColorChange.bind(this)} /></div> : null }
-
-                </div>
+                { this.state.displayColorPicker ? <div className="ColorPickerContainer"><div className="ColorPickerDismiss" onClick={this.closePencilColorPicker.bind(this)}></div><ChromePicker color={this.state.strokeStyle} onChangeComplete={this.handleStrokeColorChange.bind(this)} /></div> : null }
 
               </div>
 
@@ -436,11 +439,7 @@ export default class DrawArea extends Component {
               Bg color
               <div className="ColorPickerPlaceholder">
 
-                <div className="ColorPickerContainer">
-
-                  { this.state.displayBackgroundColorPicker ? <div><div className="ColorPickerDismiss" onClick={this.closeBgColorPicker.bind(this)}></div><ChromePicker color={this.state.backgroundColor} onChangeComplete={this.handleBackgroundColorChange.bind(this)} /></div> : null }
-
-                </div>
+                { this.state.displayBackgroundColorPicker ? <div className="ColorPickerContainer"><div className="ColorPickerDismiss" onClick={this.closeBgColorPicker.bind(this)}></div><ChromePicker color={this.state.backgroundColor} onChangeComplete={this.handleBackgroundColorChange.bind(this)} /></div> : null }
 
               </div>
 

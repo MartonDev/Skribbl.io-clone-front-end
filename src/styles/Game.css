@@ -1,6 +1,8 @@
 .Game {
 
   padding: 15vh 12vw;
+  padding-bottom: 0;
+  overflow-y: hidden;
 
 }
 
